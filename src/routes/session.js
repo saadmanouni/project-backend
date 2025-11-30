@@ -14,13 +14,45 @@ router.get('/', (req, res) => {
 
 router.post('/start', (req, res) => {
   try {
-    db.prepare('UPDATE game_session SET status = ?, current_phase = ?, updated_at = CURRENT_TIMESTAMP WHERE id = 1').run('phase1', 1);
-    const session = db.prepare('SELECT * FROM game_session WHERE id = 1').get();
-    res.json(session);
+    // 1️⃣ On récupère le case_id envoyé par l'admin
+    const { case_id } = req.body;
+
+    // 2️⃣ On récupère la session actuelle
+    const session = db
+      .prepare('SELECT * FROM game_session WHERE id = 1')
+      .get();
+
+    // 3️⃣ On détermine quel case_id utiliser
+    const selectedCaseId = case_id || session.current_case_id;
+
+    if (!selectedCaseId) {
+      return res.status(400).json({
+        error: "Aucun cas sélectionné. Impossible de démarrer le jeu."
+      });
+    }
+
+    // 4️⃣ Mise à jour de la session avec current_case_id
+    db.prepare(`
+      UPDATE game_session 
+      SET 
+        status = 'phase1', 
+        current_phase = 1,
+        current_case_id = ?,
+        updated_at = CURRENT_TIMESTAMP
+      WHERE id = 1
+    `).run(selectedCaseId);
+
+    const updatedSession = db
+      .prepare('SELECT * FROM game_session WHERE id = 1')
+      .get();
+
+    res.json(updatedSession);
+
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 });
+
 
 router.post('/next-phase', (req, res) => {
   try {
@@ -39,7 +71,6 @@ router.post('/next-phase', (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
-
 router.post('/reset', (req, res) => {
   try {
     db.exec(`
@@ -49,48 +80,28 @@ router.post('/reset', (req, res) => {
       DELETE FROM comments;
       DELETE FROM flash_answers;
       DELETE FROM prise_en_charge;
-      DELETE FROM team_clues;
-      DELETE FROM teams;
-      UPDATE game_session SET status = 'lobby', current_phase = 0, updated_at = CURRENT_TIMESTAMP WHERE id = 1;
+
+      UPDATE teams SET points = 100;
+
+      UPDATE game_session SET 
+        status = 'lobby',
+        current_phase = 0,
+        updated_at = CURRENT_TIMESTAMP
+      WHERE id = 1;
     `);
 
-    const clues = [
-      "Femme de 28 ans",
-      "Douleurs abdominales depuis 2 semaines",
-      "Fièvre intermittente à 38.5°C",
-      "Antécédents: appendicectomie il y a 3 ans"
-    ];
+    const session = db
+      .prepare('SELECT * FROM game_session WHERE id = 1')
+      .get();
 
-    const teamNames = ['Équipe 1', 'Équipe 2', 'Équipe 3', 'Équipe 4'];
-    const insertTeam = db.prepare('INSERT INTO teams (id, name, points) VALUES (?, ?, ?)');
-
-    // ensure there is at least one case to attach initial clues to
-    let defaultCase = db.prepare('SELECT id FROM cases LIMIT 1').get();
-    let caseId;
-    if (defaultCase && defaultCase.id) {
-      caseId = defaultCase.id;
-    } else {
-      caseId = generateId();
-      db.prepare('INSERT INTO cases (id, title, clinical_description) VALUES (?, ?, ?)').run(
-        caseId,
-        'Cas par défaut',
-        'Cas initial créé automatiquement.'
-      );
-    }
-
-    const insertClue = db.prepare('INSERT INTO team_clues (id, team_id, case_id, clue_text, clue_cost, is_piratable) VALUES (?, ?, ?, ?, ?, ?)');
-
-    teamNames.forEach((name, index) => {
-      const id = generateId();
-      insertTeam.run(id, name, 100);
-      insertClue.run(generateId(), id, caseId, clues[index], 0, 0);
-    });
-
-    const session = db.prepare('SELECT * FROM game_session WHERE id = 1').get();
     res.json(session);
+
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 });
+
+
+
 
 export default router;

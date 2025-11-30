@@ -1,103 +1,69 @@
-import express from 'express';
-import { db, generateId } from '../db/database.js';
+import express from "express";
+import { db, generateId } from "../db/database.js";
 
 const router = express.Router();
 
-router.get('/questions', (req, res) => {
+/**
+ * 🟢 1️⃣ Récupérer toutes les questions Buzz
+ * Route : GET /api/buzz/questions
+ */
+router.get("/questions", (req, res) => {
   try {
-    const { case_id } = req.query;
-    let query = 'SELECT * FROM flash_questions';
-    const params = [];
-
-    if (case_id) {
-      query += ' WHERE case_id = ?';
-      params.push(case_id);
-    }
-
-    query += ' ORDER BY created_at';
-    const questions = db.prepare(query).all(...params);
+    const questions = db.prepare("SELECT * FROM buzz_questions ORDER BY created_at").all();
     res.json(questions);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
+  } catch (err) {
+    console.error("Erreur GET /buzz/questions :", err);
+    res.status(500).json({ error: "Erreur serveur" });
   }
 });
 
-router.post('/questions', (req, res) => {
-  const { case_id, question, correct_answer, options, points } = req.body;
-
-  if (!case_id || !question || !correct_answer || !options) {
-    return res.status(400).json({ error: 'Missing required fields' });
-  }
-
+/**
+ * 🟢 2️⃣ Ajouter une nouvelle question Buzz
+ * Route : POST /api/buzz/questions
+ * Body attendu : { question: string, answer: string }
+ */
+router.post("/questions", (req, res) => {
   try {
-    const id = generateId();
-    const optionsStr = typeof options === 'string' ? options : JSON.stringify(options);
-
-    db.prepare(`
-      INSERT INTO flash_questions (id, case_id, question, correct_answer, options, points)
-      VALUES (?, ?, ?, ?, ?, ?)
-    `).run(id, case_id, question, correct_answer, optionsStr, points || 10);
-
-    const flashQuestion = db.prepare('SELECT * FROM flash_questions WHERE id = ?').get(id);
-    res.json(flashQuestion);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
-
-router.post('/answer', (req, res) => {
-  const { team_id, question_id, answer } = req.body;
-
-  if (!team_id || !question_id || !answer) {
-    return res.status(400).json({ error: 'Missing required fields' });
-  }
-
-  try {
-    const question = db.prepare('SELECT * FROM flash_questions WHERE id = ?').get(question_id);
-    if (!question) {
-      return res.status(404).json({ error: 'Question not found' });
+    const { question, answer } = req.body;
+    if (!question || !answer) {
+      return res.status(400).json({ error: "Champs requis manquants (question, answer)" });
     }
 
-    const isCorrect = answer === question.correct_answer ? 1 : 0;
-    const pointsEarned = isCorrect ? question.points : -5;
-
     const id = generateId();
-    db.prepare(`
-      INSERT INTO flash_answers (id, team_id, question_id, answer, is_correct, points_earned)
-      VALUES (?, ?, ?, ?, ?, ?)
-    `).run(id, team_id, question_id, answer, isCorrect, pointsEarned);
+    db.prepare("INSERT INTO buzz_questions (id, question, answer) VALUES (?, ?, ?)").run(id, question, answer);
 
-    db.prepare('UPDATE teams SET points = points + ? WHERE id = ?').run(pointsEarned, team_id);
-
-    const result = {
-      id,
-      is_correct: isCorrect,
-      points_earned: pointsEarned,
-      correct_answer: question.correct_answer
-    };
-
-    res.json(result);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
+    const newQ = db.prepare("SELECT * FROM buzz_questions WHERE id = ?").get(id);
+    res.json(newQ);
+  } catch (err) {
+    console.error("Erreur POST /buzz/questions :", err);
+    res.status(500).json({ error: "Erreur serveur" });
   }
 });
 
-router.get('/answers', (req, res) => {
+/**
+ * 🟢 3️⃣ Mettre à jour toutes les questions Buzz
+ * Route : PUT /api/buzz/questions
+ * Body attendu : { questions: [{ question, answer }] }
+ */
+router.put("/questions", (req, res) => {
   try {
-    const { team_id } = req.query;
-    let query = 'SELECT * FROM flash_answers';
-    const params = [];
-
-    if (team_id) {
-      query += ' WHERE team_id = ?';
-      params.push(team_id);
+    const { questions } = req.body;
+    if (!Array.isArray(questions)) {
+      return res.status(400).json({ error: "Format invalide, attendu: tableau de questions" });
     }
 
-    query += ' ORDER BY created_at';
-    const answers = db.prepare(query).all(...params);
-    res.json(answers);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
+    db.prepare("DELETE FROM buzz_questions").run();
+    const insert = db.prepare("INSERT INTO buzz_questions (id, question, answer) VALUES (?, ?, ?)");
+
+    const insertMany = db.transaction((arr) => {
+      arr.forEach((q) => insert.run(generateId(), q.question, q.answer));
+    });
+    insertMany(questions);
+
+    res.json({ success: true });
+  } catch (err) {
+    console.error("Erreur PUT /buzz/questions :", err);
+    res.status(500).json({ error: "Erreur serveur" });
   }
 });
 
