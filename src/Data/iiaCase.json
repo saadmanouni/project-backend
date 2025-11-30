@@ -1,0 +1,282 @@
+{
+  "title": "Invagination intestinale aiguë",
+  "patientDescription": "Nourrisson de 10 mois, conscient, amené aux urgences pour douleurs abdominales brutales et intenses depuis 8 heures.",
+  "phases": [
+    {
+      "id": 1,
+      "title": "Observation clinique initiale",
+      "objectives": [
+        "Observer le tableau clinique aigu",
+        "Identifier les signes de gravité",
+        "Préparer l’interrogatoire"
+      ],
+      "teams": [
+        { "team": 1, "hint": "Vomissements" },
+        { "team": 2, "hint": "Rectorragie" },
+        { "team": 3, "hint": "Arrêt du transit" },
+        { "team": 4, "hint": "Distension abdominale" }
+      ]
+    },
+    {
+      "id": 2,
+      "title": "Interrogatoire",
+      "usefulQuestions": [
+        {
+          "text": "Antécédents personnels ?",
+          "points": 1,
+          "answer": "Une symptomatologie de gastroentérite et diarrhée dans les 2 semaines précédentes."
+        },
+        {
+          "text": "S'agit-il d’un premier épisode ?",
+          "points": 1,
+          "answer": "Les parents rapportent que le nourrisson a déjà présenté des crises similaires, qui se résolvaient spontanément."
+        },
+        {
+          "text": "Vomissements ?",
+          "points": 1,
+          "answer": "Oui, vomissements alimentaires puis bilieux après quelques heures d’évolution."
+        },
+        {
+          "text": "Type de vomissement (bilieux / alimentaire) ?",
+          "points": 1,
+          "answer": "Des vomissements tardifs."
+        },
+        {
+          "text": "Dernières selles ? Aspect ?",
+          "points": 2,
+          "answer": "Selles sanglantes, rouge foncé, glaireuses (“gelée de groseille”)."
+        },
+        {
+          "text": "Le comportement du transit ?",
+          "points": 2,
+          "answer": "Nourrisson émet quelques gaz mais arrêt des matières."
+        },
+        {
+          "text": "Évolution des symptômes dans le temps ?",
+          "points": 3,
+          "answer": "Début brutal il y a 8 heures, crises paroxystiques de douleur, avec vomissements puis rectorragies."
+        },
+        {
+          "text": "Antécédents familiaux de MICI ?",
+          "points": 2,
+          "answer": "Aucun antécédent familial de MICI, information non contributive."
+        },
+        {
+          "text": "Antécédents chirurgicaux ?",
+          "points": 1,
+          "answer": "Pas d’antécédent chirurgical."
+        },
+        {
+          "text": "Type de la douleur ?",
+          "points": 3,
+          "answer": "Crises de pleurs intenses, soudaines et inhabituelles entrecoupées de périodes de calme."
+        },
+        {
+          "text": "Douleur testiculaire ?",
+          "points": 3,
+          "answer": "Non, absence de douleur testiculaire."
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "title": "Examen clinique",
+      "questions": [
+        {
+          "text": "Fièvre ?",
+          "points": 1,
+          "answer": "Température à 38°C, fébricule modérée."
+        },
+        {
+          "text": "TRC ?",
+          "points": 1,
+          "answer": "2 secondes (proche de la limite normale, signe d’hypoperfusion périphérique)."
+        },
+        {
+          "text": "Tension artérielle ?",
+          "points": 1,
+          "answer": "95/60 mmHg."
+        },
+        {
+          "text": "Fréquence cardiaque ?",
+          "points": 1,
+          "answer": "Tachycardie à 135 bpm."
+        },
+        {
+          "text": "Souffle cardiaque ?",
+          "points": 1,
+          "answer": "Non, pas de souffle."
+        },
+        {
+          "text": "Défense ou douleur abdominale ?",
+          "points": 2,
+          "answer": "Abdomen sensible avec défense localisée au niveau de la fosse iliaque droite."
+        },
+        {
+          "text": "Percussion ?",
+          "points": 1,
+          "answer": "Tympanisme abdominal global."
+        },
+        {
+          "text": "Bruits hydro-aériques abdominaux ?",
+          "points": 1,
+          "answer": "Diminution des bruits, évoquant un iléus."
+        },
+        {
+          "text": "Fréquence respiratoire ?",
+          "points": 1,
+          "answer": "28/min."
+        },
+        {
+          "text": "Masse palpable ?",
+          "points": 1,
+          "answer": "On peut sentir une masse abdominale fusiforme, ferme, mobile, sensible."
+        },
+        {
+          "text": "Recherche de sang au doigtier ?",
+          "points": 1,
+          "answer": "Présence de sang rouge au doigtier, confirmant la rectorragie."
+        },
+        {
+          "text": "État de conscience ?",
+          "points": 2,
+          "answer": "Conscient, répond correctement, mais légèrement agité."
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "title": "Examens complémentaires",
+      "exams": [
+        {
+          "name": "Échographie abdominale",
+          "points": 2,
+          "answer": "Une image en cocarde (ou “target sign”) sur une coupe transversale."
+        },
+        {
+          "name": "ASP (Abdomen Sans Préparation)",
+          "points": 2,
+          "answer": "Niveaux hydro-aériques multiples et une raréfaction d’air."
+        },
+        {
+          "name": "Ionogramme sanguin",
+          "points": 1,
+          "answer": "Hyponatrémie légère (Na = 132 mmol/L), kaliémie normale."
+        },
+        {
+          "name": "NFS",
+          "points": 1,
+          "answer": "Leucocytose à 15 500/mm³, Hb normale."
+        },
+        {
+          "name": "CRP",
+          "points": 1,
+          "answer": "Élevée à 58 mg/L."
+        },
+        {
+          "name": "Bilan de coagulation",
+          "points": 1,
+          "answer": "TP à 80 %, TCA normal."
+        },
+        {
+          "name": "Lactates",
+          "points": 1,
+          "answer": "3,5 mmol/L (élevés → suspicion d’ischémie intestinale)."
+        },
+        {
+          "name": "Gaz du sang",
+          "points": 1,
+          "answer": "pH 7,34 ; bicarbonates 19 mmol/L (acidose métabolique)."
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "title": "Diagnostic",
+      "diagnosis": "Invagination intestinale aiguë compliquée d’occlusion intestinale avec nécrose et perforation.",
+      "cause": "Lymphome intestinal"
+    },
+    {
+  "id": 6,
+  "title": "Épreuve du Vrai ou Faux",
+  "description": "Avant d’intervenir, chaque équipe doit démontrer sa maîtrise du cas. Trois erreurs et l’équipe est éliminée.",
+  "rules": {
+    "lives": 3,
+    "questionsCount": 10,
+    "pointsSurvivor": 5,
+    "pointsPerfect": 10,
+    "pointsJustification": 1
+  },
+  "questions": [
+    {
+      "text": "L’invagination intestinale aiguë est une occlusion due à l’enchâssement d’un segment d’intestin dans un autre.",
+      "answer": true,
+      "explanation": "C’est la définition classique de l’I.I.A."
+    },
+    {
+      "text": "Elle touche principalement les nouveau-nés avant 1 mois.",
+      "answer": false,
+      "explanation": "L’âge de prédilection est entre 3 et 9 mois."
+    },
+    {
+      "text": "Le principal symptôme est une diarrhée abondante.",
+      "answer": false,
+      "explanation": "Ce sont les douleurs abdominales et les rectorragies."
+    },
+    {
+      "text": "L’échographie montre un signe en cocarde.",
+      "answer": true,
+      "explanation": "Aspect typique de l’invagination."
+    },
+    {
+      "text": "Une lactatémie élevée suggère une ischémie intestinale.",
+      "answer": true,
+      "explanation": "Oui, les lactates augmentent en cas de souffrance tissulaire."
+    }
+  ]
+},
+
+    {
+      "id": 7,
+      "title": "Prise en charge",
+      "roles": {
+        "infirmier": [
+          {
+            "question": "Quels sont les signes de décompensation à surveiller ?",
+            "answer": "TRC > 2 sec, tachycardie, hypotension, marbrures, agitation puis obnubilation, oligurie.",
+            "points": 3
+          },
+          {
+            "question": "Quels actes initiaux réaliser ?",
+            "answer": "Pose de VVP, remplissage si prescrit, O₂, surveillance constante, monitorage, recueil urines si possible.",
+            "points": 3
+          }
+        ],
+        "interne": [
+          {
+            "question": "Définir l’invagination intestinale aiguë.",
+            "answer": "Pénétration d’un segment intestinal dans un autre entraînant une occlusion.",
+            "points": 4
+          },
+          {
+            "question": "Quels sont les signes cliniques typiques ?",
+            "answer": "Triade : douleurs abdo paroxystiques + vomissements + rectorragie.",
+            "points": 4
+          }
+        ],
+        "resident": [
+          {
+            "question": "Quelles sont les complications d’une invagination non traitée ?",
+            "answer": "Ischémie, nécrose intestinale, perforation, péritonite, choc septique, décès.",
+            "points": 6
+          },
+          {
+            "question": "Quelle est la prise en charge immédiate ?",
+            "answer": "Réanimation initiale : remplissage, O₂, antibiothérapie IV, bilan pré-opératoire, appel du chirurgien pour exérèse du segment invaginé.",
+            "points": 6
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+services:
+  backend:
+    build:
+      context: ./backend
+    container_name: projectmohcine-backend
+    command: npm run dev
+    ports:
+      - "3001:3001"
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+    environment:
+      - PORT=3001
+      - NODE_ENV=development
+    restart: always
+
+  frontend:
+    build:
+      context: .
+    container_name: projectmohcine-frontend
+    command: npm run dev
+    ports:
+      - "5173:5173"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    environment:
+      - VITE_API_URL=http://localhost:3001/api
+    depends_on:
+      - backend
+    restart: always
