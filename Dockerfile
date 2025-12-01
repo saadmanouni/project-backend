@@ -1,4 +1,5 @@
 FROM node:18
+<<<<<<< HEAD
 
 WORKDIR /app
 
@@ -18,3 +19,12 @@ COPY project/backend .
 EXPOSE 3001
 
 CMD ["npm", "start"]
+=======
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
+COPY . .
+EXPOSE 3001
+CMD ["npm", "start"]
+
+>>>>>>> ca43c40f3ae77bd97fe14ccb34ffe9e3ca56c746
